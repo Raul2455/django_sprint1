@@ -5,8 +5,7 @@
 
 {% block content%}
 <div class="container py-5">
-  <h1>Лента записей</h1>                        
-  <!-- Перебираем в цикле все посты -->
+  <h1>Лента записей</h1>
   <hr>
   {% for post in posts reversed %}
   <article>
@@ -20,8 +19,7 @@
       <li>
         Категория: <a href="{% url 'blog:category_posts' post.category %}">{{ post.category }}</a>
       </li>
-    </ul>          
-    <!-- Первые 10 слов -->
+    </ul>
     <p>
       {{ post.text|truncatewords:10 }}
     </p>

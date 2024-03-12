@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from django.http import Http404
+
 posts = [
     {
         'id': 0,
@@ -48,6 +50,8 @@ def post_detail(request, id):
     """Функция отображает полный текст поста."""
     template = 'blog/detail.html'
     context = {'post': posts[id]}
+    if id not in [post['id'] for post in posts]:
+        raise Http404
     return render(request, template, context)
 
 
