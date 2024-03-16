@@ -1,31 +1,29 @@
 {% extends "base.html" %}
 {% block title %}
-    Лента записей
+  Лента записей
 {% endblock %}
-
-{% block content%}
-<div class="container py-5">
+{% block content %}
   <h1>Лента записей</h1>
-  <hr>
-  {% for post in posts reversed %}
-  <article>
-    <ul>
-      <li>
-        Место: {{ post.location }}              
-      </li>
-      <li>
-        Дата: {{ post.date }}
-      </li>
-      <li>
-        Категория: <a href="{% url 'blog:category_posts' post.category %}">{{ post.category }}</a>
-      </li>
-    </ul>
-    <p>
-      {{ post.text|truncatewords:10 }}
-    </p>
-    <a href="{% url 'blog:post_detail' post.id %}">Читать полный текст</a>
-  </article>
-  <hr>
-  {% endfor %}                  
-</div>
+  {% for post in posts|dictsortreversed:"id" %}
+    <hr>
+    <article>
+      <ul>
+        <li>
+          Место: {{ post.location }}              
+        </li>
+        <li>
+          Дата: {{ post.date }}
+        </li>
+        {% if post.category %}
+        <li>
+          Категория: <a href="{% url 'blog:category_posts' post.category %}">{{ post.category }}</a>
+        </li>
+        {% endif %}
+      </ul>
+      <p>
+        {{ post.text|truncatewords:10 }}
+      </p>
+      <a href="{% url 'blog:post_detail' post.id %}">Читать полный текст</a>
+    </article>
+    {% endfor %}
 {% endblock %}

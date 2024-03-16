@@ -1,7 +1,13 @@
-from django.shortcuts import render
-
+# Сначала импорты из стандартной библиотеки
 from django.http import Http404
 
+# После чего импорты из сторонних библиотек
+# (в данном случае, Django - это сторонняя библиотека)
+from django.shortcuts import render
+
+# Импорты модулей текущего проекта (если такие будут) следовали бы здесь
+
+# posts - это данные, которые нам нужно отобразить на страницах
 posts = [
     {
         'id': 0,
@@ -13,7 +19,7 @@ posts = [
                 Весь экипаж, кроме меня, утонул; я же,
                 несчастный Робинзон Крузо, был выброшен
                 полумёртвым на берег этого проклятого острова,
-                который назвал островом Отчаяния.''',
+                который назвал островом Отчаяния.'''
     },
     {
         'id': 1,
@@ -29,7 +35,7 @@ posts = [
                 Мне всё думалось, что, останься мы на корабле, мы
                 непременно спаслись бы. Теперь из его обломков мы могли бы
                 построить баркас, на котором и выбрались бы из этого
-                гиблого места.''',
+                гиблого места.'''
     },
     {
         'id': 2,
@@ -41,17 +47,27 @@ posts = [
                 в щепки; на том месте, где он стоял, торчат какие-то
                 жалкие обломки,  да и те видны только во время отлива.
                 Весь этот день я хлопотал  около вещей: укрывал и
-                укутывал их, чтобы не испортились от дождя.''',
+                укутывал их, чтобы не испортились от дождя.'''
     },
 ]
 
+# Создадим словарь вне функции post_detail, чтобы он не создавался каждый
+# раз при вызове функции
+posts_dict = {post['id']: post for post in posts}
 
-def post_detail(request, id):
+
+def post_detail(request, pk):  # Заменяем id на pk в параметрах функции
     """Функция отображает полный текст поста."""
     template = 'blog/detail.html'
-    context = {'post': posts[id]}
-    if id not in [post['id'] for post in posts]:
+
+    # Проверяем существование поста с полученным pk (вместо id)
+    if pk not in posts_dict:
         raise Http404
+
+    # Получаем пост из словаря по pk (вместо id)
+    post = posts_dict[pk]
+    context = {'post': post}
+
     return render(request, template, context)
 
 
@@ -63,7 +79,8 @@ def category_posts(request, category_slug):
 
 
 def index(request):
-    """Функция основной страницы."""
-    template = 'blog/index.html'
-    context = {'posts': posts}
-    return render(request, template, context)
+    context = {
+        # Здесь мы используем reversed для инвертирования списка постов
+        'posts': list(reversed(posts))
+    }
+    return render(request, 'blog/index.html', context)

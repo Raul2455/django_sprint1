@@ -155,3 +155,7 @@ html/img/img/
 
 # Игнорировать все файлы в папке static
 static_dev/
+
+
+
+html/

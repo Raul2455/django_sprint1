@@ -1,6 +1,6 @@
 import pytest
 
-from tests.conftest import try_get_url
+from conftest import try_get_url
 
 
 @pytest.mark.parametrize(
