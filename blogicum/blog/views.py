@@ -1,8 +1,5 @@
-# Сначала импорты из стандартной библиотеки
+# Импорты из стандартных и сторонних библиотек
 from django.http import Http404
-
-# После чего импорты из сторонних библиотек
-# (в данном случае, Django - это сторонняя библиотека)
 from django.shortcuts import render
 
 # Импорты модулей текущего проекта (если такие будут) следовали бы здесь
@@ -53,19 +50,19 @@ posts = [
 
 # Создадим словарь вне функции post_detail, чтобы он не создавался каждый
 # раз при вызове функции
-posts_dict = {post['id']: post for post in posts}
+posts_mapping = {post['id']: post for post in posts}
 
 
-def post_detail(request, pk):  # Заменяем id на pk в параметрах функции
+def post_detail(request, pk):
     """Функция отображает полный текст поста."""
     template = 'blog/detail.html'
 
-    # Проверяем существование поста с полученным pk (вместо id)
-    if pk not in posts_dict:
+    # Проверяем существование поста с полученным pk
+    if pk not in posts_mapping:
         raise Http404
 
-    # Получаем пост из словаря по pk (вместо id)
-    post = posts_dict[pk]
+    # Получаем пост из словаря по pk
+    post = posts_mapping[pk]
     context = {'post': post}
 
     return render(request, template, context)
@@ -80,7 +77,6 @@ def category_posts(request, category_slug):
 
 def index(request):
     context = {
-        # Здесь мы используем reversed для инвертирования списка постов
         'posts': list(reversed(posts))
     }
     return render(request, 'blog/index.html', context)
